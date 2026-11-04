@@ -9,6 +9,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import urlsplit
 from .agent import investigate
+from .config import load_local_env
 from .lab import Lab, SCENARIOS, metrics
 
 WEB = Path(__file__).parent / "web"
@@ -145,6 +146,7 @@ def main():
     parser.add_argument("--port", type=int, default=8787)
     parser.add_argument("--data", default="data")
     args = parser.parse_args()
+    load_local_env()
     app = App(args.data)
     server = create_server(app, args.port)
     print(f"IncidentLens: http://127.0.0.1:{server.server_port}", flush=True)

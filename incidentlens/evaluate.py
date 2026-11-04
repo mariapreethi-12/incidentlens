@@ -5,6 +5,7 @@ import tempfile
 import time
 from pathlib import Path
 from .agent import investigate
+from .config import load_local_env
 from .lab import Lab, SCENARIOS
 
 
@@ -29,7 +30,9 @@ def evaluate(mode="baseline", repeats=2):
                                      "elapsed_ms": round((time.perf_counter()-start)*1000, 1), "error": type(exc).__name__})
         finally:
             lab.close()
-    return {"mode": mode, "trials": len(rows), "correct": sum(r["correct"] for r in rows),
+    import os
+    return {"mode": mode, "model": os.environ.get("OPENAI_MODEL") if mode != "baseline" else None,
+            "trials": len(rows), "correct": sum(r["correct"] for r in rows),
             "accuracy": round(sum(r["correct"] for r in rows)/len(rows), 3), "rows": rows,
             "scope": "Controlled, known local fault families, not production accuracy or held-out generalization. Baseline rules were designed for these faults. API failures count as incorrect."}
 
@@ -40,6 +43,7 @@ def main():
     parser.add_argument("--repeats", type=int, default=2)
     parser.add_argument("--output", default="results/evaluation.json")
     args = parser.parse_args()
+    load_local_env()
     if not 1 <= args.repeats <= 10:
         parser.error("repeats must be between 1 and 10")
     result = evaluate(args.mode, args.repeats)

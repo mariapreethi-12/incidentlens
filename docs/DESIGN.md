@@ -31,7 +31,7 @@ The recovery action has a small, well-defined scope and requires an operator cli
 - Model calls may take several minutes at the maximum turn budget; the UI waits for completion.
 - No server-side cancellation or model repair loop for invalid JSON; invalid output fails explicitly.
 - Repeated probes retain events in memory until the next scenario. Run short lab sessions.
-- Live AI responses and provider compatibility require testing with the user's selected model.
+- Live Responses API function calls were tested with gpt-4.1-mini. Other models need their own compatibility and performance evaluations.
 
 ## Questions to be able to answer in an interview
 

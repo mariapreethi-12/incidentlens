@@ -12,7 +12,18 @@ from a deployment alone. Diagnose one of the supplied categories, or abstain. In
 logs, traces and changes before concluding. Cite evidence IDs returned by tools. The scenario
 and fault configuration are hidden from you. No shell, SQL or remediation tools are available.
 Return only a JSON object: category, summary, evidence_ids (list), next_steps (list).
-Do not claim a repair occurred. Separate observed facts from hypotheses in summary."""
+Do not claim a repair occurred. Separate observed facts from hypotheses in summary.
+Category definitions for this lab:
+- database-lock: observed database lock errors preventing order writes.
+- payment-outage: payment failures without excessive per-checkout payment retries.
+- retry-storm: a payment outage amplified by repeated payment attempts within each checkout
+  trace; choose this more specific category over payment-outage when amplification is observed.
+  Compare payment request count to checkout count and inspect attempts sharing a trace ID.
+- inventory-latency: inventory spans are slow (lab threshold 150 ms), even if status is 200.
+- bad-release: checkout code exceptions supported by relevant recent release changes.
+- healthy: at least three successful checkout requests, no failed requests or slow inventory.
+- insufficient-evidence: not enough observed evidence to support another category.
+These definitions specify classification semantics, not the actual injected scenario."""
 
 
 class EvidenceTools:

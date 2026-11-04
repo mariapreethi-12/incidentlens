@@ -7,6 +7,7 @@ from unittest.mock import patch
 from urllib.error import HTTPError
 from urllib.request import Request, urlopen
 from incidentlens.agent import EvidenceTools, investigate, validate
+from incidentlens.config import load_local_env
 from incidentlens.lab import Lab, SCENARIOS, metrics
 from incidentlens.server import App, create_server
 
@@ -85,6 +86,27 @@ class LabTests(unittest.TestCase):
         with patch.dict(os.environ, {"OPENAI_MODEL":"test-model"}):
             with self.assertRaises(RuntimeError):
                 investigate(self.lab.snapshot(),"agent",broken)
+
+
+class ConfigTests(unittest.TestCase):
+    def test_local_settings_load_without_overriding_environment(self):
+        with tempfile.TemporaryDirectory() as directory, patch.dict(os.environ, {}, clear=True):
+            file = __import__('pathlib').Path(directory) / '.env'
+            file.write_text('OPENAI_API_KEY="test-secret"\nOPENAI_MODEL=test-model\nUNRELATED=ignored\n', encoding='utf-8')
+            load_local_env(file)
+            self.assertEqual(os.environ['OPENAI_API_KEY'], 'test-secret')
+            self.assertEqual(os.environ['OPENAI_MODEL'], 'test-model')
+            self.assertNotIn('UNRELATED', os.environ)
+            os.environ['OPENAI_MODEL'] = 'existing-model'
+            load_local_env(file)
+            self.assertEqual(os.environ['OPENAI_MODEL'], 'existing-model')
+
+    def test_placeholder_is_not_loaded(self):
+        with tempfile.TemporaryDirectory() as directory, patch.dict(os.environ, {}, clear=True):
+            file = __import__('pathlib').Path(directory) / '.env'
+            file.write_text('OPENAI_API_KEY=PASTE_YOUR_KEY_HERE\n', encoding='utf-8')
+            load_local_env(file)
+            self.assertNotIn('OPENAI_API_KEY', os.environ)
 
 
 class AppTests(unittest.TestCase):

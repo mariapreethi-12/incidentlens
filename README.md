@@ -82,7 +82,7 @@ export OPENAI_MODEL='<your model ID>'
 python -m incidentlens.server
 ```
 
-`.env.example` documents the settings; `.env` is not automatically loaded. Keep keys in environment variables. Model requests transmit the controlled lab evidence to OpenAI and incur usage charges. The browser never receives the key. Provider failures are surfaced; they never turn into a fake successful AI diagnosis.
+Alternatively, copy `.env.example` to `.env` in the project directory and fill in both settings. The server and evaluation CLI load these two settings automatically at startup; existing environment variables take priority. `.env` is excluded from Git. Restart the server after changing configuration. Model requests transmit the controlled lab evidence to OpenAI and incur usage charges. The browser never receives the key. Provider failures are surfaced; they never turn into a fake successful AI diagnosis.
 
 The adapter uses the [official Responses function-calling protocol](https://developers.openai.com/api/docs/guides/function-calling): function calls execute against an allowlist, results return using matching call IDs, and output items are retained for subsequent turns. Requests set `store: false`.
 
@@ -108,7 +108,19 @@ python -m incidentlens.evaluate --mode single-pass --repeats 3 --output results/
 
 Model modes require the environment settings above and make paid calls. Reports are written to `results/`; API failures count as incorrect. Usage includes input and output token counts. Dollar costs are not estimated because pricing depends on the selected model and token classes.
 
-Initial local verification on Windows/Python 3.13: **11 tests passed; baseline 18/18 correct** across six conditions and three repetitions. Raw measurements are in [docs/baseline-evaluation.json](docs/baseline-evaluation.json). These rules were written for these fault families. This number is a lab smoke benchmark, not held-out generalization, production performance, or AI accuracy. Live provider-backed accuracy has not yet been measured.
+Local verification on Windows/Python 3.13: **13 tests passed**. Live OpenAI evaluations used `gpt-4.1-mini` on November 4, 2026.
+
+| Investigator | Correct / trials | Mean investigation time | Input / output tokens |
+| --- | --- | --- | --- |
+| Rules baseline | 18 / 18 | See raw results | 0 / 0 |
+| AI tool-calling agent | 12 / 12 | 4.42 seconds | 44,698 / 4,926 |
+| AI single-pass | 12 / 12 | 3.25 seconds | 38,291 / 4,670 |
+
+Each AI mode ran two trials per condition; baseline ran three. The single-pass approach was faster and used fewer tokens in this sample. **This experiment does not establish an advantage for the agent.** No prompt caching or dollar-cost comparison is claimed. Timings exclude failure injection and traffic collection and include local evidence processing and API calls.
+
+Raw results: [baseline](docs/baseline-evaluation.json), [agent](docs/agent-evaluation.json), [single-pass](docs/single-pass-evaluation.json). A [sample live AI investigation](docs/sample-ai-investigation.json) includes the actual evidence and tool-call trace. The dashboard recovery check passed five fresh checkout probes.
+
+These are controlled known fault families, not held-out generalization or production accuracy. The first live smoke run misclassified retry amplification as a payment outage. We clarified the category definitions before collecting the tabulated results. That [original miss](docs/development-smoke.json) is preserved and discussed in [the evaluation notes](docs/EVALUATION.md). The rules and prompt were developed for these scenarios.
 
 Tests cover real faults and recovery, abstention, fourfold retry amplification, fabricated citations, unauthorized tools, tool budgets, model function-call round trips using a fake transport, provider failure handling, concurrent operation rejection, stale/repeated approvals, HTTP assets and origin checks.
 
@@ -130,7 +142,7 @@ Raw live telemetry stays in memory; order data and investigation reports persist
 
 ## Next engineering milestones
 
-1. Run the model-backed and single-pass evaluations with a chosen model; publish failures as well as successes.
+1. Expand the live comparisons to additional models and repeat counts; publish failures as well as successes.
 2. Add held-out fault variants, noisy and missing telemetry, multiple simultaneous faults, and prompt-injection cases.
 3. Export OpenTelemetry spans and move service handlers to independently deployed containers.
 4. Add authenticated public demo sessions, quotas, bounded telemetry retention, and model cost budgets.

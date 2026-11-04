@@ -1,0 +1,171 @@
+{
+  "mode": "single-pass",
+  "model": "gpt-4.1-mini",
+  "trials": 12,
+  "correct": 12,
+  "accuracy": 1.0,
+  "rows": [
+    {
+      "repeat": 1,
+      "expected": "healthy",
+      "predicted": "healthy",
+      "correct": true,
+      "elapsed_ms": 3881.9,
+      "citations": 20,
+      "usage": {
+        "input_tokens": 3359,
+        "output_tokens": 485
+      },
+      "error": null
+    },
+    {
+      "repeat": 1,
+      "expected": "database-lock",
+      "predicted": "database-lock",
+      "correct": true,
+      "elapsed_ms": 3085.2,
+      "citations": 14,
+      "usage": {
+        "input_tokens": 3519,
+        "output_tokens": 390
+      },
+      "error": null
+    },
+    {
+      "repeat": 1,
+      "expected": "payment-outage",
+      "predicted": "payment-outage",
+      "correct": true,
+      "elapsed_ms": 3832.7,
+      "citations": 16,
+      "usage": {
+        "input_tokens": 2719,
+        "output_tokens": 408
+      },
+      "error": null
+    },
+    {
+      "repeat": 1,
+      "expected": "inventory-latency",
+      "predicted": "inventory-latency",
+      "correct": true,
+      "elapsed_ms": 3285.9,
+      "citations": 10,
+      "usage": {
+        "input_tokens": 3406,
+        "output_tokens": 390
+      },
+      "error": null
+    },
+    {
+      "repeat": 1,
+      "expected": "bad-release",
+      "predicted": "bad-release",
+      "correct": true,
+      "elapsed_ms": 2997.2,
+      "citations": 8,
+      "usage": {
+        "input_tokens": 1455,
+        "output_tokens": 320
+      },
+      "error": null
+    },
+    {
+      "repeat": 1,
+      "expected": "retry-storm",
+      "predicted": "retry-storm",
+      "correct": true,
+      "elapsed_ms": 3643.0,
+      "citations": 13,
+      "usage": {
+        "input_tokens": 4823,
+        "output_tokens": 397
+      },
+      "error": null
+    },
+    {
+      "repeat": 2,
+      "expected": "healthy",
+      "predicted": "healthy",
+      "correct": true,
+      "elapsed_ms": 4004.6,
+      "citations": 21,
+      "usage": {
+        "input_tokens": 3420,
+        "output_tokens": 519
+      },
+      "error": null
+    },
+    {
+      "repeat": 2,
+      "expected": "database-lock",
+      "predicted": "database-lock",
+      "correct": true,
+      "elapsed_ms": 3482.0,
+      "citations": 14,
+      "usage": {
+        "input_tokens": 3467,
+        "output_tokens": 424
+      },
+      "error": null
+    },
+    {
+      "repeat": 2,
+      "expected": "payment-outage",
+      "predicted": "payment-outage",
+      "correct": true,
+      "elapsed_ms": 2786.9,
+      "citations": 10,
+      "usage": {
+        "input_tokens": 2705,
+        "output_tokens": 346
+      },
+      "error": null
+    },
+    {
+      "repeat": 2,
+      "expected": "inventory-latency",
+      "predicted": "inventory-latency",
+      "correct": true,
+      "elapsed_ms": 2498.3,
+      "citations": 7,
+      "usage": {
+        "input_tokens": 3299,
+        "output_tokens": 283
+      },
+      "error": null
+    },
+    {
+      "repeat": 2,
+      "expected": "bad-release",
+      "predicted": "bad-release",
+      "correct": true,
+      "elapsed_ms": 2039.4,
+      "citations": 8,
+      "usage": {
+        "input_tokens": 1426,
+        "output_tokens": 238
+      },
+      "error": null
+    },
+    {
+      "repeat": 2,
+      "expected": "retry-storm",
+      "predicted": "retry-storm",
+      "correct": true,
+      "elapsed_ms": 3461.3,
+      "citations": 27,
+      "usage": {
+        "input_tokens": 4693,
+        "output_tokens": 470
+      },
+      "error": null
+    }
+  ],
+  "scope": "Controlled, known local fault families, not production accuracy or held-out generalization. Baseline rules were designed for these faults. API failures count as incorrect.",
+  "summary": {
+    "mean_investigation_ms": 3249.9,
+    "input_tokens": 38291,
+    "output_tokens": 4670
+  }
+}

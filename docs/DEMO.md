@@ -3,7 +3,7 @@
 1. Start the app with `python -m incidentlens.server`.
 2. Select **Retry amplification**, then inject and collect traffic.
 3. Point out eight checkout requests versus thirty-two failing payment requests.
-4. Run the rules baseline, or the AI agent after configuring and evaluating a live model.
+4. Choose **AI agent · tool calling** and run the investigation. The saved local configuration is loaded at server startup.
 5. Expand `read_traces` and show four payment attempts sharing the same checkout trace ID.
 6. Click a citation to inspect its observed record.
 7. Approve the lab reset. Show five fresh checkouts passing verification.
@@ -11,7 +11,7 @@
 
 Do not call a baseline recording an AI agent recording. For the AI version, show model identity, tool usage, token usage, and an actual successful model-backed run.
 
-## LinkedIn draft for the current version
+## LinkedIn draft for the evaluated version
 
 I built IncidentLens, a local lab for evidence-driven incident investigation.
 
@@ -19,9 +19,13 @@ The checkout app can fail in five controlled ways: a database lock, a payment ou
 
 The investigation interface exposes the evidence behind a diagnosis and requires an operator to approve recovery. Five fresh checkouts verify the result.
 
-The rules baseline passed 18/18 controlled trials. Next I am evaluating the tool-calling AI investigator against the same evidence in a single prompt, including failures and cost. The baseline result is not a claim about AI accuracy.
+I compared a tool-calling AI investigator against the same evidence in a single prompt, using GPT-4.1 mini. Both classified 12/12 controlled trials correctly. The single-prompt version was faster (3.25 vs. 4.42 seconds on average) and used fewer tokens.
 
-[Add your repository URL and a short recording. Tag a provider only when the recording or results actually use its technology.]
+One useful failure: the initial agent confused retry amplification with a simple payment outage. I clarified the category definitions, reran the tests, and preserved that original miss in the repository. These are small, known lab scenarios, not a claim about production accuracy.
+
+Repository: https://github.com/mariapreethi-12/incidentlens
+
+[Add a short recording of a live AI investigation. OpenAI's model was used in these evaluations; tag providers only when discussing technology actually used.]
 
 ## Ownership and development
 

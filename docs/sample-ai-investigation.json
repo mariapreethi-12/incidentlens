@@ -1,0 +1,757 @@
+{
+  "generation": "ff1120a18d",
+  "mode": "agent",
+  "model": "gpt-4.1-mini",
+  "diagnosis": {
+    "category": "retry-storm",
+    "summary": "All checkout requests failed (8/8) with downstream 503 errors from the payments service. Payments service requests were 32 for 8 checkout requests, averaging 4 payment attempts per checkout, indicating amplified retries per checkout. All payments requests failed with a status of 503 'Payment gateway unavailable'. Inventory service responded fast and successfully (p95 ~0.02 ms, status 200). Recent change increased the payment retry budget from 1 to 4 attempts, correlating with observed retry amplification. There are no database lock errors or slow inventory spans and no exceptions indicating a bad release.",
+    "evidence_ids": [
+      "m-ff1120a18d-checkout",
+      "m-ff1120a18d-payments",
+      "m-ff1120a18d-inventory",
+      "e-ff1120a18d-2",
+      "e-ff1120a18d-3",
+      "e-ff1120a18d-4",
+      "e-ff1120a18d-5",
+      "e-ff1120a18d-8",
+      "e-ff1120a18d-9",
+      "e-ff1120a18d-10",
+      "e-ff1120a18d-11",
+      "e-ff1120a18d-14",
+      "e-ff1120a18d-15",
+      "e-ff1120a18d-16",
+      "e-ff1120a18d-17",
+      "c-ff1120a18d-2"
+    ],
+    "next_steps": [
+      "Investigate payment gateway availability and errors at the payments service endpoint.",
+      "Evaluate whether the increased payment retry budget is exacerbating the failure impact, considering reducing retry attempts.",
+      "Monitor for recovery of payments service or fallback mechanisms to mitigate impact.",
+      "Check for any network or third-party gateway issues outside the local checkout system."
+    ]
+  },
+  "steps": [
+    {
+      "tool": "read_metrics",
+      "records": 4,
+      "evidence": [
+        {
+          "id": "m-ff1120a18d-checkout",
+          "service": "checkout",
+          "requests": 8,
+          "errors": 8,
+          "error_rate": 1.0,
+          "p95_ms": 32.63
+        },
+        {
+          "id": "m-ff1120a18d-inventory",
+          "service": "inventory",
+          "requests": 8,
+          "errors": 0,
+          "error_rate": 0.0,
+          "p95_ms": 0.02
+        },
+        {
+          "id": "m-ff1120a18d-payments",
+          "service": "payments",
+          "requests": 32,
+          "errors": 32,
+          "error_rate": 1.0,
+          "p95_ms": 0.01
+        },
+        {
+          "id": "m-ff1120a18d-database",
+          "service": "database",
+          "requests": 0,
+          "errors": 0,
+          "error_rate": 0,
+          "p95_ms": 0
+        }
+      ]
+    },
+    {
+      "tool": "read_logs",
+      "records": 48,
+      "evidence": [
+        {
+          "id": "e-ff1120a18d-1",
+          "timestamp": 1793816380.6333036,
+          "service": "inventory",
+          "trace_id": "1044141fb673",
+          "status": 200,
+          "message": "Inventory reservation completed",
+          "duration_ms": 0.01
+        },
+        {
+          "id": "e-ff1120a18d-2",
+          "timestamp": 1793816380.634751,
+          "service": "payments",
+          "trace_id": "1044141fb673",
+          "status": 503,
+          "message": "Payment gateway unavailable",
+          "duration_ms": 0.01
+        },
+        {
+          "id": "e-ff1120a18d-3",
+          "timestamp": 1793816380.635888,
+          "service": "payments",
+          "trace_id": "1044141fb673",
+          "status": 503,
+          "message": "Payment gateway unavailable",
+          "duration_ms": 0.0
+        },
+        {
+          "id": "e-ff1120a18d-4",
+          "timestamp": 1793816380.6367204,
+          "service": "payments",
+          "trace_id": "1044141fb673",
+          "status": 503,
+          "message": "Payment gateway unavailable",
+          "duration_ms": 0.0
+        },
+        {
+          "id": "e-ff1120a18d-5",
+          "timestamp": 1793816380.637654,
+          "service": "payments",
+          "trace_id": "1044141fb673",
+          "status": 503,
+          "message": "Payment gateway unavailable",
+          "duration_ms": 0.0
+        },
+        {
+          "id": "e-ff1120a18d-6",
+          "timestamp": 1793816380.6379235,
+          "service": "checkout",
+          "trace_id": "1044141fb673",
+          "status": 502,
+          "message": "Downstream HTTP 503 from payments",
+          "duration_ms": 7.89
+        },
+        {
+          "id": "e-ff1120a18d-7",
+          "timestamp": 1793816380.639834,
+          "service": "inventory",
+          "trace_id": "c48dc19c042c",
+          "status": 200,
+          "message": "Inventory reservation completed",
+          "duration_ms": 0.0
+        },
+        {
+          "id": "e-ff1120a18d-8",
+          "timestamp": 1793816380.6495945,
+          "service": "payments",
+          "trace_id": "c48dc19c042c",
+          "status": 503,
+          "message": "Payment gateway unavailable",
+          "duration_ms": 0.01
+        },
+        {
+          "id": "e-ff1120a18d-9",
+          "timestamp": 1793816380.665691,
+          "service": "payments",
+          "trace_id": "c48dc19c042c",
+          "status": 503,
+          "message": "Payment gateway unavailable",
+          "duration_ms": 0.01
+        },
+        {
+          "id": "e-ff1120a18d-10",
+          "timestamp": 1793816380.6673415,
+          "service": "payments",
+          "trace_id": "c48dc19c042c",
+          "status": 503,
+          "message": "Payment gateway unavailable",
+          "duration_ms": 0.0
+        },
+        {
+          "id": "e-ff1120a18d-11",
+          "timestamp": 1793816380.668229,
+          "service": "payments",
+          "trace_id": "c48dc19c042c",
+          "status": 503,
+          "message": "Payment gateway unavailable",
+          "duration_ms": 0.0
+        },
+        {
+          "id": "e-ff1120a18d-12",
+          "timestamp": 1793816380.668492,
+          "service": "checkout",
+          "trace_id": "c48dc19c042c",
+          "status": 502,
+          "message": "Downstream HTTP 503 from payments",
+          "duration_ms": 29.55
+        },
+        {
+          "id": "e-ff1120a18d-13",
+          "timestamp": 1793816380.670478,
+          "service": "inventory",
+          "trace_id": "478fa0611acd",
+          "status": 200,
+          "message": "Inventory reservation completed",
+          "duration_ms": 0.0
+        },
+        {
+          "id": "e-ff1120a18d-14",
+          "timestamp": 1793816380.6714296,
+          "service": "payments",
+          "trace_id": "478fa0611acd",
+          "status": 503,
+          "message": "Payment gateway unavailable",
+          "duration_ms": 0.0
+        },
+        {
+          "id": "e-ff1120a18d-15",
+          "timestamp": 1793816380.6724463,
+          "service": "payments",
+          "trace_id": "478fa0611acd",
+          "status": 503,
+          "message": "Payment gateway unavailable",
+          "duration_ms": 0.0
+        },
+        {
+          "id": "e-ff1120a18d-16",
+          "timestamp": 1793816380.673248,
+          "service": "payments",
+          "trace_id": "478fa0611acd",
+          "status": 503,
+          "message": "Payment gateway unavailable",
+          "duration_ms": 0.0
+        },
+        {
+          "id": "e-ff1120a18d-17",
+          "timestamp": 1793816380.674062,
+          "service": "payments",
+          "trace_id": "478fa0611acd",
+          "status": 503,
+          "message": "Payment gateway unavailable",
+          "duration_ms": 0.0
+        },
+        {
+          "id": "e-ff1120a18d-18",
+          "timestamp": 1793816380.6742465,
+          "service": "checkout",
+          "trace_id": "478fa0611acd",
+          "status": 502,
+          "message": "Downstream HTTP 503 from payments",
+          "duration_ms": 4.55
+        },
+        {
+          "id": "e-ff1120a18d-19",
+          "timestamp": 1793816380.6758013,
+          "service": "inventory",
+          "trace_id": "a806b63c853b",
+          "status": 200,
+          "message": "Inventory reservation completed",
+          "duration_ms": 0.0
+        },
+        {
+          "id": "e-ff1120a18d-20",
+          "timestamp": 1793816380.6769361,
+          "service": "payments",
+          "trace_id": "a806b63c853b",
+          "status": 503,
+          "message": "Payment gateway unavailable",
+          "duration_ms": 0.0
+        },
+        {
+          "id": "e-ff1120a18d-21",
+          "timestamp": 1793816380.6790304,
+          "service": "payments",
+          "trace_id": "a806b63c853b",
+          "status": 503,
+          "message": "Payment gateway unavailable",
+          "duration_ms": 0.01
+        },
+        {
+          "id": "e-ff1120a18d-22",
+          "timestamp": 1793816380.6803095,
+          "service": "payments",
+          "trace_id": "a806b63c853b",
+          "status": 503,
+          "message": "Payment gateway unavailable",
+          "duration_ms": 0.0
+        },
+        {
+          "id": "e-ff1120a18d-23",
+          "timestamp": 1793816380.6816235,
+          "service": "payments",
+          "trace_id": "a806b63c853b",
+          "status": 503,
+          "message": "Payment gateway unavailable",
+          "duration_ms": 0.01
+        },
+        {
+          "id": "e-ff1120a18d-24",
+          "timestamp": 1793816380.6819146,
+          "service": "checkout",
+          "trace_id": "a806b63c853b",
+          "status": 502,
+          "message": "Downstream HTTP 503 from payments",
+          "duration_ms": 6.8
+        },
+        {
+          "id": "e-ff1120a18d-25",
+          "timestamp": 1793816380.6834753,
+          "service": "inventory",
+          "trace_id": "fe2bd8c4d898",
+          "status": 200,
+          "message": "Inventory reservation completed",
+          "duration_ms": 0.0
+        },
+        {
+          "id": "e-ff1120a18d-26",
+          "timestamp": 1793816380.6849937,
+          "service": "payments",
+          "trace_id": "fe2bd8c4d898",
+          "status": 503,
+          "message": "Payment gateway unavailable",
+          "duration_ms": 0.01
+        },
+        {
+          "id": "e-ff1120a18d-27",
+          "timestamp": 1793816380.686267,
+          "service": "payments",
+          "trace_id": "fe2bd8c4d898",
+          "status": 503,
+          "message": "Payment gateway unavailable",
+          "duration_ms": 0.0
+        },
+        {
+          "id": "e-ff1120a18d-28",
+          "timestamp": 1793816380.6873403,
+          "service": "payments",
+          "trace_id": "fe2bd8c4d898",
+          "status": 503,
+          "message": "Payment gateway unavailable",
+          "duration_ms": 0.0
+        },
+        {
+          "id": "e-ff1120a18d-29",
+          "timestamp": 1793816380.6885207,
+          "service": "payments",
+          "trace_id": "fe2bd8c4d898",
+          "status": 503,
+          "message": "Payment gateway unavailable",
+          "duration_ms": 0.01
+        },
+        {
+          "id": "e-ff1120a18d-30",
+          "timestamp": 1793816380.688894,
+          "service": "checkout",
+          "trace_id": "fe2bd8c4d898",
+          "status": 502,
+          "message": "Downstream HTTP 503 from payments",
+          "duration_ms": 6.07
+        },
+        {
+          "id": "e-ff1120a18d-31",
+          "timestamp": 1793816380.6983876,
+          "service": "inventory",
+          "trace_id": "e2627c16b71d",
+          "status": 200,
+          "message": "Inventory reservation completed",
+          "duration_ms": 0.01
+        },
+        {
+          "id": "e-ff1120a18d-32",
+          "timestamp": 1793816380.6994455,
+          "service": "payments",
+          "trace_id": "e2627c16b71d",
+          "status": 503,
+          "message": "Payment gateway unavailable",
+          "duration_ms": 0.0
+        },
+        {
+          "id": "e-ff1120a18d-33",
+          "timestamp": 1793816380.7004964,
+          "service": "payments",
+          "trace_id": "e2627c16b71d",
+          "status": 503,
+          "message": "Payment gateway unavailable",
+          "duration_ms": 0.0
+        },
+        {
+          "id": "e-ff1120a18d-34",
+          "timestamp": 1793816380.7013032,
+          "service": "payments",
+          "trace_id": "e2627c16b71d",
+          "status": 503,
+          "message": "Payment gateway unavailable",
+          "duration_ms": 0.0
+        },
+        {
+          "id": "e-ff1120a18d-35",
+          "timestamp": 1793816380.702147,
+          "service": "payments",
+          "trace_id": "e2627c16b71d",
+          "status": 503,
+          "message": "Payment gateway unavailable",
+          "duration_ms": 0.0
+        },
+        {
+          "id": "e-ff1120a18d-36",
+          "timestamp": 1793816380.7023466,
+          "service": "checkout",
+          "trace_id": "e2627c16b71d",
+          "status": 502,
+          "message": "Downstream HTTP 503 from payments",
+          "duration_ms": 5.17
+        },
+        {
+          "id": "e-ff1120a18d-37",
+          "timestamp": 1793816380.7293584,
+          "service": "inventory",
+          "trace_id": "c07b36ad9977",
+          "status": 200,
+          "message": "Inventory reservation completed",
+          "duration_ms": 0.02
+        },
+        {
+          "id": "e-ff1120a18d-38",
+          "timestamp": 1793816380.7456415,
+          "service": "payments",
+          "trace_id": "c07b36ad9977",
+          "status": 503,
+          "message": "Payment gateway unavailable",
+          "duration_ms": 0.01
+        },
+        {
+          "id": "e-ff1120a18d-39",
+          "timestamp": 1793816380.7475867,
+          "service": "payments",
+          "trace_id": "c07b36ad9977",
+          "status": 503,
+          "message": "Payment gateway unavailable",
+          "duration_ms": 0.01
+        },
+        {
+          "id": "e-ff1120a18d-40",
+          "timestamp": 1793816380.748904,
+          "service": "payments",
+          "trace_id": "c07b36ad9977",
+          "status": 503,
+          "message": "Payment gateway unavailable",
+          "duration_ms": 0.0
+        },
+        {
+          "id": "e-ff1120a18d-41",
+          "timestamp": 1793816380.7497897,
+          "service": "payments",
+          "trace_id": "c07b36ad9977",
+          "status": 503,
+          "message": "Payment gateway unavailable",
+          "duration_ms": 0.0
+        },
+        {
+          "id": "e-ff1120a18d-42",
+          "timestamp": 1793816380.750033,
+          "service": "checkout",
+          "trace_id": "c07b36ad9977",
+          "status": 502,
+          "message": "Downstream HTTP 503 from payments",
+          "duration_ms": 32.63
+        },
+        {
+          "id": "e-ff1120a18d-43",
+          "timestamp": 1793816380.7518933,
+          "service": "inventory",
+          "trace_id": "0e4b09c6eda7",
+          "status": 200,
+          "message": "Inventory reservation completed",
+          "duration_ms": 0.0
+        },
+        {
+          "id": "e-ff1120a18d-44",
+          "timestamp": 1793816380.7531393,
+          "service": "payments",
+          "trace_id": "0e4b09c6eda7",
+          "status": 503,
+          "message": "Payment gateway unavailable",
+          "duration_ms": 0.0
+        },
+        {
+          "id": "e-ff1120a18d-45",
+          "timestamp": 1793816380.7543623,
+          "service": "payments",
+          "trace_id": "0e4b09c6eda7",
+          "status": 503,
+          "message": "Payment gateway unavailable",
+          "duration_ms": 0.01
+        },
+        {
+          "id": "e-ff1120a18d-46",
+          "timestamp": 1793816380.7556043,
+          "service": "payments",
+          "trace_id": "0e4b09c6eda7",
+          "status": 503,
+          "message": "Payment gateway unavailable",
+          "duration_ms": 0.0
+        },
+        {
+          "id": "e-ff1120a18d-47",
+          "timestamp": 1793816380.7565172,
+          "service": "payments",
+          "trace_id": "0e4b09c6eda7",
+          "status": 503,
+          "message": "Payment gateway unavailable",
+          "duration_ms": 0.0
+        },
+        {
+          "id": "e-ff1120a18d-48",
+          "timestamp": 1793816380.7567685,
+          "service": "checkout",
+          "trace_id": "0e4b09c6eda7",
+          "status": 502,
+          "message": "Downstream HTTP 503 from payments",
+          "duration_ms": 5.64
+        }
+      ]
+    },
+    {
+      "tool": "read_traces",
+      "records": 24,
+      "evidence": [
+        {
+          "id": "e-ff1120a18d-1",
+          "timestamp": 1793816380.6333036,
+          "service": "inventory",
+          "trace_id": "1044141fb673",
+          "status": 200,
+          "message": "Inventory reservation completed",
+          "duration_ms": 0.01
+        },
+        {
+          "id": "e-ff1120a18d-2",
+          "timestamp": 1793816380.634751,
+          "service": "payments",
+          "trace_id": "1044141fb673",
+          "status": 503,
+          "message": "Payment gateway unavailable",
+          "duration_ms": 0.01
+        },
+        {
+          "id": "e-ff1120a18d-3",
+          "timestamp": 1793816380.635888,
+          "service": "payments",
+          "trace_id": "1044141fb673",
+          "status": 503,
+          "message": "Payment gateway unavailable",
+          "duration_ms": 0.0
+        },
+        {
+          "id": "e-ff1120a18d-4",
+          "timestamp": 1793816380.6367204,
+          "service": "payments",
+          "trace_id": "1044141fb673",
+          "status": 503,
+          "message": "Payment gateway unavailable",
+          "duration_ms": 0.0
+        },
+        {
+          "id": "e-ff1120a18d-5",
+          "timestamp": 1793816380.637654,
+          "service": "payments",
+          "trace_id": "1044141fb673",
+          "status": 503,
+          "message": "Payment gateway unavailable",
+          "duration_ms": 0.0
+        },
+        {
+          "id": "e-ff1120a18d-6",
+          "timestamp": 1793816380.6379235,
+          "service": "checkout",
+          "trace_id": "1044141fb673",
+          "status": 502,
+          "message": "Downstream HTTP 503 from payments",
+          "duration_ms": 7.89
+        },
+        {
+          "id": "e-ff1120a18d-7",
+          "timestamp": 1793816380.639834,
+          "service": "inventory",
+          "trace_id": "c48dc19c042c",
+          "status": 200,
+          "message": "Inventory reservation completed",
+          "duration_ms": 0.0
+        },
+        {
+          "id": "e-ff1120a18d-8",
+          "timestamp": 1793816380.6495945,
+          "service": "payments",
+          "trace_id": "c48dc19c042c",
+          "status": 503,
+          "message": "Payment gateway unavailable",
+          "duration_ms": 0.01
+        },
+        {
+          "id": "e-ff1120a18d-9",
+          "timestamp": 1793816380.665691,
+          "service": "payments",
+          "trace_id": "c48dc19c042c",
+          "status": 503,
+          "message": "Payment gateway unavailable",
+          "duration_ms": 0.01
+        },
+        {
+          "id": "e-ff1120a18d-10",
+          "timestamp": 1793816380.6673415,
+          "service": "payments",
+          "trace_id": "c48dc19c042c",
+          "status": 503,
+          "message": "Payment gateway unavailable",
+          "duration_ms": 0.0
+        },
+        {
+          "id": "e-ff1120a18d-11",
+          "timestamp": 1793816380.668229,
+          "service": "payments",
+          "trace_id": "c48dc19c042c",
+          "status": 503,
+          "message": "Payment gateway unavailable",
+          "duration_ms": 0.0
+        },
+        {
+          "id": "e-ff1120a18d-12",
+          "timestamp": 1793816380.668492,
+          "service": "checkout",
+          "trace_id": "c48dc19c042c",
+          "status": 502,
+          "message": "Downstream HTTP 503 from payments",
+          "duration_ms": 29.55
+        },
+        {
+          "id": "e-ff1120a18d-13",
+          "timestamp": 1793816380.670478,
+          "service": "inventory",
+          "trace_id": "478fa0611acd",
+          "status": 200,
+          "message": "Inventory reservation completed",
+          "duration_ms": 0.0
+        },
+        {
+          "id": "e-ff1120a18d-14",
+          "timestamp": 1793816380.6714296,
+          "service": "payments",
+          "trace_id": "478fa0611acd",
+          "status": 503,
+          "message": "Payment gateway unavailable",
+          "duration_ms": 0.0
+        },
+        {
+          "id": "e-ff1120a18d-15",
+          "timestamp": 1793816380.6724463,
+          "service": "payments",
+          "trace_id": "478fa0611acd",
+          "status": 503,
+          "message": "Payment gateway unavailable",
+          "duration_ms": 0.0
+        },
+        {
+          "id": "e-ff1120a18d-16",
+          "timestamp": 1793816380.673248,
+          "service": "payments",
+          "trace_id": "478fa0611acd",
+          "status": 503,
+          "message": "Payment gateway unavailable",
+          "duration_ms": 0.0
+        },
+        {
+          "id": "e-ff1120a18d-17",
+          "timestamp": 1793816380.674062,
+          "service": "payments",
+          "trace_id": "478fa0611acd",
+          "status": 503,
+          "message": "Payment gateway unavailable",
+          "duration_ms": 0.0
+        },
+        {
+          "id": "e-ff1120a18d-18",
+          "timestamp": 1793816380.6742465,
+          "service": "checkout",
+          "trace_id": "478fa0611acd",
+          "status": 502,
+          "message": "Downstream HTTP 503 from payments",
+          "duration_ms": 4.55
+        },
+        {
+          "id": "e-ff1120a18d-19",
+          "timestamp": 1793816380.6758013,
+          "service": "inventory",
+          "trace_id": "a806b63c853b",
+          "status": 200,
+          "message": "Inventory reservation completed",
+          "duration_ms": 0.0
+        },
+        {
+          "id": "e-ff1120a18d-20",
+          "timestamp": 1793816380.6769361,
+          "service": "payments",
+          "trace_id": "a806b63c853b",
+          "status": 503,
+          "message": "Payment gateway unavailable",
+          "duration_ms": 0.0
+        },
+        {
+          "id": "e-ff1120a18d-21",
+          "timestamp": 1793816380.6790304,
+          "service": "payments",
+          "trace_id": "a806b63c853b",
+          "status": 503,
+          "message": "Payment gateway unavailable",
+          "duration_ms": 0.01
+        },
+        {
+          "id": "e-ff1120a18d-22",
+          "timestamp": 1793816380.6803095,
+          "service": "payments",
+          "trace_id": "a806b63c853b",
+          "status": 503,
+          "message": "Payment gateway unavailable",
+          "duration_ms": 0.0
+        },
+        {
+          "id": "e-ff1120a18d-23",
+          "timestamp": 1793816380.6816235,
+          "service": "payments",
+          "trace_id": "a806b63c853b",
+          "status": 503,
+          "message": "Payment gateway unavailable",
+          "duration_ms": 0.01
+        },
+        {
+          "id": "e-ff1120a18d-24",
+          "timestamp": 1793816380.6819146,
+          "service": "checkout",
+          "trace_id": "a806b63c853b",
+          "status": 502,
+          "message": "Downstream HTTP 503 from payments",
+          "duration_ms": 6.8
+        }
+      ]
+    },
+    {
+      "tool": "read_changes",
+      "records": 2,
+      "evidence": [
+        {
+          "id": "c-ff1120a18d-1",
+          "timestamp": 1793816380.6289852,
+          "service": "inventory",
+          "change": "Updated dashboard annotation; no runtime change"
+        },
+        {
+          "id": "c-ff1120a18d-2",
+          "timestamp": 1793816380.6289876,
+          "service": "checkout",
+          "change": "Changed payment retry budget from 1 to 4 attempts"
+        }
+      ]
+    }
+  ],
+  "usage": {
+    "input_tokens": 6224,
+    "output_tokens": 493
+  },
+  "elapsed_ms": 4723.6,
+  "citation_validity": "All cited IDs exist in evidence returned to the investigator; causality is not automatically verified."
+}
