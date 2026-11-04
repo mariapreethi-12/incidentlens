@@ -14,8 +14,6 @@ cd incidentlens
 python -m incidentlens.server
 ```
 
-The clone URL above is the intended destination; the repository must be published before cloning works.
-
 Open **http://127.0.0.1:8787**. Choose **Retry amplification**, click **Inject & collect traffic**, then **Run investigation**. Expand the tool execution trace and click evidence citations. Approve the lab reset to verify five fresh checkouts.
 
 The server binds only to loopback. This version is a local engineering lab, not a public multi-user deployment. It needs authentication, isolation, request quotas, and a production HTTP server before public hosting.
