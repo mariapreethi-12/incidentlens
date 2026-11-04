@@ -1,0 +1,243 @@
+{
+  "mode": "baseline",
+  "trials": 18,
+  "correct": 18,
+  "accuracy": 1.0,
+  "rows": [
+    {
+      "repeat": 1,
+      "expected": "healthy",
+      "predicted": "healthy",
+      "correct": true,
+      "elapsed_ms": 0.1,
+      "citations": 2,
+      "usage": {
+        "input_tokens": 0,
+        "output_tokens": 0
+      },
+      "error": null
+    },
+    {
+      "repeat": 1,
+      "expected": "database-lock",
+      "predicted": "database-lock",
+      "correct": true,
+      "elapsed_ms": 0.2,
+      "citations": 2,
+      "usage": {
+        "input_tokens": 0,
+        "output_tokens": 0
+      },
+      "error": null
+    },
+    {
+      "repeat": 1,
+      "expected": "payment-outage",
+      "predicted": "payment-outage",
+      "correct": true,
+      "elapsed_ms": 0.1,
+      "citations": 3,
+      "usage": {
+        "input_tokens": 0,
+        "output_tokens": 0
+      },
+      "error": null
+    },
+    {
+      "repeat": 1,
+      "expected": "inventory-latency",
+      "predicted": "inventory-latency",
+      "correct": true,
+      "elapsed_ms": 0.1,
+      "citations": 2,
+      "usage": {
+        "input_tokens": 0,
+        "output_tokens": 0
+      },
+      "error": null
+    },
+    {
+      "repeat": 1,
+      "expected": "bad-release",
+      "predicted": "bad-release",
+      "correct": true,
+      "elapsed_ms": 0.1,
+      "citations": 2,
+      "usage": {
+        "input_tokens": 0,
+        "output_tokens": 0
+      },
+      "error": null
+    },
+    {
+      "repeat": 1,
+      "expected": "retry-storm",
+      "predicted": "retry-storm",
+      "correct": true,
+      "elapsed_ms": 0.1,
+      "citations": 6,
+      "usage": {
+        "input_tokens": 0,
+        "output_tokens": 0
+      },
+      "error": null
+    },
+    {
+      "repeat": 2,
+      "expected": "healthy",
+      "predicted": "healthy",
+      "correct": true,
+      "elapsed_ms": 0.1,
+      "citations": 2,
+      "usage": {
+        "input_tokens": 0,
+        "output_tokens": 0
+      },
+      "error": null
+    },
+    {
+      "repeat": 2,
+      "expected": "database-lock",
+      "predicted": "database-lock",
+      "correct": true,
+      "elapsed_ms": 0.1,
+      "citations": 2,
+      "usage": {
+        "input_tokens": 0,
+        "output_tokens": 0
+      },
+      "error": null
+    },
+    {
+      "repeat": 2,
+      "expected": "payment-outage",
+      "predicted": "payment-outage",
+      "correct": true,
+      "elapsed_ms": 0.1,
+      "citations": 3,
+      "usage": {
+        "input_tokens": 0,
+        "output_tokens": 0
+      },
+      "error": null
+    },
+    {
+      "repeat": 2,
+      "expected": "inventory-latency",
+      "predicted": "inventory-latency",
+      "correct": true,
+      "elapsed_ms": 0.1,
+      "citations": 2,
+      "usage": {
+        "input_tokens": 0,
+        "output_tokens": 0
+      },
+      "error": null
+    },
+    {
+      "repeat": 2,
+      "expected": "bad-release",
+      "predicted": "bad-release",
+      "correct": true,
+      "elapsed_ms": 0.1,
+      "citations": 2,
+      "usage": {
+        "input_tokens": 0,
+        "output_tokens": 0
+      },
+      "error": null
+    },
+    {
+      "repeat": 2,
+      "expected": "retry-storm",
+      "predicted": "retry-storm",
+      "correct": true,
+      "elapsed_ms": 0.1,
+      "citations": 6,
+      "usage": {
+        "input_tokens": 0,
+        "output_tokens": 0
+      },
+      "error": null
+    },
+    {
+      "repeat": 3,
+      "expected": "healthy",
+      "predicted": "healthy",
+      "correct": true,
+      "elapsed_ms": 0.1,
+      "citations": 2,
+      "usage": {
+        "input_tokens": 0,
+        "output_tokens": 0
+      },
+      "error": null
+    },
+    {
+      "repeat": 3,
+      "expected": "database-lock",
+      "predicted": "database-lock",
+      "correct": true,
+      "elapsed_ms": 0.1,
+      "citations": 2,
+      "usage": {
+        "input_tokens": 0,
+        "output_tokens": 0
+      },
+      "error": null
+    },
+    {
+      "repeat": 3,
+      "expected": "payment-outage",
+      "predicted": "payment-outage",
+      "correct": true,
+      "elapsed_ms": 0.1,
+      "citations": 3,
+      "usage": {
+        "input_tokens": 0,
+        "output_tokens": 0
+      },
+      "error": null
+    },
+    {
+      "repeat": 3,
+      "expected": "inventory-latency",
+      "predicted": "inventory-latency",
+      "correct": true,
+      "elapsed_ms": 0.1,
+      "citations": 2,
+      "usage": {
+        "input_tokens": 0,
+        "output_tokens": 0
+      },
+      "error": null
+    },
+    {
+      "repeat": 3,
+      "expected": "bad-release",
+      "predicted": "bad-release",
+      "correct": true,
+      "elapsed_ms": 0.0,
+      "citations": 2,
+      "usage": {
+        "input_tokens": 0,
+        "output_tokens": 0
+      },
+      "error": null
+    },
+    {
+      "repeat": 3,
+      "expected": "retry-storm",
+      "predicted": "retry-storm",
+      "correct": true,
+      "elapsed_ms": 0.1,
+      "citations": 6,
+      "usage": {
+        "input_tokens": 0,
+        "output_tokens": 0
+      },
+      "error": null
+    }
+  ],
+  "scope": "Controlled, known local fault families, not production accuracy or held-out generalization. Baseline rules were designed for these faults. API failures count as incorrect."
+}
